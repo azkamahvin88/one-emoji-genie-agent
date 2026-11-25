@@ -10,7 +10,17 @@ that acts on your behalf: you ask, and it does the work -- the way
 rubbing a lamp has your wish carried out. The genie says that in one
 glyph: it takes orders and delivers, it works while you watch, and it
 lands without any explanation. It is not the obvious robot or smiley
-half the field sends, and it reads instantly at any size.
+half the field sends (and the brief rules those out), and it reads
+instantly at any size.
+
+Why not the other crowded picks? The compass (direction, not action),
+the octopus (many arms, but a mascot for multitasking, not agency),
+the puzzle (a piece of a problem, not the solver of it), and the owl
+(wisdom, not doing) all describe a trait of an agent. The genie is
+the only one that describes the job itself: someone else's wish,
+carried out. That is the whole definition of an agent -- "you ask,
+it does" -- compressed into a single character, with no other emoji
+in the field carrying the same meaning.
 
 The program is fully deterministic: no clock, no randomness, no
 network, no input.
@@ -47,6 +57,17 @@ def main() -> None:
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     with open(ENTRY_PATH, "w", encoding="utf-8") as handle:
         handle.write(entry)
+    # Read the file back and confirm it holds exactly the entry and
+    # nothing else: a stray newline or a partial write would silently
+    # change what the gate scorer reads, so the program refuses to
+    # exit cleanly unless the bytes on disk match the entry exactly.
+    with open(ENTRY_PATH, "rb") as handle:
+        written = handle.read()
+    if written != entry.encode("utf-8"):
+        raise ValueError(
+            f"entry.txt mismatch: wrote {written!r}, expected "
+            f"{entry.encode('utf-8')!r}"
+        )
 
 
 if __name__ == "__main__":
